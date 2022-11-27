@@ -1,7 +1,13 @@
+import { MainSearchInput } from './mainSearchInput'
+import { MainAddCar } from './mainAddCar'
+import StyledMainHeader from '../style/mainStyle'
+
 export const MainHeader = () => {
 	return (
-		<div>
-			<h1>Cars Shop App</h1>
-		</div>
+		<>
+			<StyledMainHeader>
+				<MainAddCar></MainAddCar>
+			</StyledMainHeader>
+		</>
 	)
 }
