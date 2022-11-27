@@ -22,8 +22,19 @@ const StyledForm = styled.div`
 `
 
 export const FormSite = () => {
-	const { register, handleSubmit } = useForm<CarValue>()
-
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+	} = useForm<CarValue>({
+		defaultValues: {
+			companyName: 'AUDI',
+			carModel: 'Audi A6',
+			carColor: 'Pink',
+			carDoors: 4,
+		},
+	})
+	console.log(errors)
 	return (
 		<>
 			<h1 style={{ textAlign: 'center' }}>Add Cars Form</h1>
@@ -36,18 +47,26 @@ export const FormSite = () => {
 				<StyledForm>
 					<label htmlFor='companyName'>Company name:</label>
 					<input
-						{...(register('companyName'), { required: true, minLength: 3 })}
+						{...register('companyName', { required: 'This is required', minLength: 3 })}
 						id='companyName'
 						style={{ width: '50vw', borderRadius: '10px' }}
 						type='text'
 					/>
 					<label htmlFor='carModel'>Car model name:</label>
-					<input {...register('carModel')} style={{ width: '50vw', borderRadius: '10px' }} type='text' />
+					<input
+						{...register('carModel', { required: true })}
+						style={{ width: '50vw', borderRadius: '10px' }}
+						type='text'
+					/>
 					<label htmlFor='carColor'>Car color:</label>
-					<input {...register('carColor')} style={{ width: '50vw', borderRadius: '10px' }} type='text' />
+					<input
+						{...register('carColor', { required: true })}
+						style={{ width: '50vw', borderRadius: '10px' }}
+						type='text'
+					/>
 					<label htmlFor='carDoors'>Car dors:</label>
 					<input
-						{...register('carDoors')}
+						{...register('carDoors', { required: true })}
 						style={{ width: '50vw', borderRadius: '10px' }}
 						name='carDoors'
 						type='text'
