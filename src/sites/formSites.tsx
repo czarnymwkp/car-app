@@ -1,7 +1,8 @@
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import styled from 'styled-components'
 
-type CarValue = {
+interface CarValue {
 	companyName: string
 	carModel: string
 	carColor: string
@@ -25,52 +26,66 @@ export const FormSite = () => {
 	const {
 		register,
 		handleSubmit,
+		watch,
 		formState: { errors },
 	} = useForm<CarValue>({
 		defaultValues: {
-			companyName: 'AUDI',
-			carModel: 'Audi A6',
-			carColor: 'Pink',
-			carDoors: 4,
+			companyName: '',
+			carModel: '',
+			carColor: '',
 		},
 	})
-	console.log(errors)
+	const [newCar, setNewCar] = useState<CarValue>()
+	const onSubmit = handleSubmit(data => {
+		setNewCar(prevValue => (prevValue = data))
+	})
+	useEffect(() => {
+		console.log(newCar)
+	}, [onSubmit])
 	return (
 		<>
-			<h1 style={{ textAlign: 'center' }}>Add Cars Form</h1>
-
-			<form
-				style={{ backgroundColor: '#0b071d' }}
-				onSubmit={handleSubmit(data => {
-					console.log(data)
-				})}>
+			<p>{newCar?.companyName}</p>
+			<form style={{ backgroundColor: '#0b071d' }} onSubmit={onSubmit}>
 				<StyledForm>
 					<label htmlFor='companyName'>Company name:</label>
 					<input
-						{...register('companyName', { required: 'This is required', minLength: 3 })}
+						{...register('companyName', {
+							required: 'Write a name of company',
+							minLength: {
+								value: 3,
+								message: 'Minimal letter is 3',
+							},
+						})}
 						id='companyName'
 						style={{ width: '50vw', borderRadius: '10px' }}
 						type='text'
 					/>
+					<p style={{ color: 'red' }}>{errors.companyName?.message}</p>
 					<label htmlFor='carModel'>Car model name:</label>
 					<input
-						{...register('carModel', { required: true })}
+						{...register('carModel', { required: 'Need to write car model name' })}
 						style={{ width: '50vw', borderRadius: '10px' }}
 						type='text'
 					/>
+					<p style={{ color: 'red' }}>{errors.carModel?.message}</p>
+
 					<label htmlFor='carColor'>Car color:</label>
 					<input
-						{...register('carColor', { required: true })}
+						{...register('carColor', { required: 'Color required' })}
 						style={{ width: '50vw', borderRadius: '10px' }}
 						type='text'
 					/>
+					<p style={{ color: 'red' }}>{errors.carColor?.message}</p>
+
 					<label htmlFor='carDoors'>Car dors:</label>
 					<input
-						{...register('carDoors', { required: true })}
+						{...register('carDoors', { required: 'Ur car dont have doors??', maxLength: 5 })}
 						style={{ width: '50vw', borderRadius: '10px' }}
 						name='carDoors'
 						type='text'
 					/>
+					<p style={{ color: 'red' }}>{errors.carDoors?.message}</p>
+
 					<label htmlFor='fuelType'>Fuel type:</label>
 					<select {...register('fuelType')} name='fuelType' id='fuel'>
 						<option value=''>Select..:</option>
@@ -94,7 +109,6 @@ export const FormSite = () => {
 			</form>
 			<div>
 				<button className='btn btn-primary' style={{ marginLeft: '100px' }}>
-					{' '}
 					Add picture
 				</button>
 			</div>
