@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import styled from 'styled-components'
 
@@ -41,10 +42,20 @@ export const FormSite = () => {
 	})
 	useEffect(() => {
 		console.log(newCar)
-	}, [onSubmit])
+	}, [])
+	const formnav = useNavigate()
 	return (
 		<>
-			<p>{newCar?.companyName}</p>
+			<div>
+				<button onClick={() => formnav('/')} style={{ margin: '20px' }} className='btn btn-info'>
+					Home
+				</button>
+				<p>{newCar?.companyName}</p>
+				<p>{newCar?.carModel}</p>
+				<p>{newCar?.carColor}</p>
+				<p>{newCar?.fuelType}</p>
+			</div>
+
 			<form style={{ backgroundColor: '#0b071d' }} onSubmit={onSubmit}>
 				<StyledForm>
 					<label htmlFor='companyName'>Company name:</label>
@@ -93,6 +104,9 @@ export const FormSite = () => {
 						<option value='Pb'>Pb</option>
 						<option value='Pb + LPG'>PB+LPG</option>
 					</select>
+					<button className='btn btn-danger' style={{ marginTop: '10px' }} onClick={() => {}}>
+						Reset form
+					</button>
 					<input
 						style={{
 							marginTop: '40px',
@@ -104,6 +118,7 @@ export const FormSite = () => {
 						type='submit'
 						value={'Accept'}
 					/>
+					<button>resset</button>
 				</StyledForm>
 				<h2 style={{ textAlign: 'center' }}>.........</h2>
 			</form>
@@ -111,6 +126,10 @@ export const FormSite = () => {
 				<button className='btn btn-primary' style={{ marginLeft: '100px' }}>
 					Add picture
 				</button>
+			</div>
+			<div>
+				<h1 style={{ textAlign: 'center' }}>Added cars</h1>
+				<div style={{ minHeight: '50vh', backgroundColor: 'lightgray' }}></div>
 			</div>
 		</>
 	)

@@ -1,7 +1,11 @@
+import { Link, BrowserRouter } from 'react-router-dom'
+
 export const MainAddCar = () => {
 	return (
 		<div>
-			<button className='btn btn-primary'>Add Car</button>
+			<BrowserRouter>
+				<button className='btn btn-primary'>Add Car</button>
+			</BrowserRouter>
 		</div>
 	)
 }
