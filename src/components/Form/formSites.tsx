@@ -50,10 +50,6 @@ export const FormSite = () => {
 				<button onClick={() => formnav('/')} style={{ margin: '20px' }} className='btn btn-info'>
 					Home
 				</button>
-				<p>{newCar?.companyName}</p>
-				<p>{newCar?.carModel}</p>
-				<p>{newCar?.carColor}</p>
-				<p>{newCar?.fuelType}</p>
 			</div>
 
 			<form style={{ backgroundColor: '#0b071d' }} onSubmit={onSubmit}>
@@ -118,18 +114,23 @@ export const FormSite = () => {
 						type='submit'
 						value={'Accept'}
 					/>
-					<button>resset</button>
 				</StyledForm>
 				<h2 style={{ textAlign: 'center' }}>.........</h2>
 			</form>
 			<div>
-				<button className='btn btn-primary' style={{ marginLeft: '100px' }}>
+				<button className='btn btn-primary' style={{ margin: '20px' }}>
 					Add picture
 				</button>
 			</div>
 			<div>
-				<h1 style={{ textAlign: 'center' }}>Added cars</h1>
-				<div style={{ minHeight: '50vh', backgroundColor: 'lightgray' }}></div>
+				<div style={{ backgroundColor: 'lightgray', textAlign: 'center' }}>
+					<h1 style={{ textAlign: 'center' }}>Added cars</h1>
+					<h2>Company name: {newCar?.companyName.toUpperCase()}</h2>
+					<h2>Car type:{newCar?.carModel.toUpperCase()}</h2>
+					<h2>Car color:{newCar?.carColor}</h2>
+					<h2>Fuel type: {newCar?.fuelType}</h2>
+					<h2>Doors: {newCar?.carDoors}</h2>
+				</div>
 			</div>
 		</>
 	)

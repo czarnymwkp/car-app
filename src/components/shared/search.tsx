@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 
-export const MainSearchInput = () => {
+export const SearchInput = () => {
 	let navigate = useNavigate()
 	return (
 		<>
