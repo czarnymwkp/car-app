@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useContext, createContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
+
 import styled from 'styled-components'
 
 interface CarValue {
@@ -22,7 +23,7 @@ const StyledForm = styled.div`
 	font-family: monospace;
 	font-size: xx-large;
 `
-
+export const FormContext = createContext('Hello')
 export const FormSite = () => {
 	const {
 		register,
@@ -47,12 +48,12 @@ export const FormSite = () => {
 	return (
 		<>
 			<div>
-				<button onClick={() => formnav('/')} style={{ margin: '20px' }} className='btn btn-info'>
+				<button onClick={() => formnav('/')} style={{ margin: '20px' }} className='btn btn-warning'>
 					Home
 				</button>
 			</div>
 
-			<form style={{ backgroundColor: '#0b071d' }} onSubmit={onSubmit}>
+			<form style={{ backgroundColor: '#015958', border: '2px white solid', borderRadius: '20px' }} onSubmit={onSubmit}>
 				<StyledForm>
 					<label htmlFor='companyName'>Company name:</label>
 					<input
@@ -100,16 +101,15 @@ export const FormSite = () => {
 						<option value='Pb'>Pb</option>
 						<option value='Pb + LPG'>PB+LPG</option>
 					</select>
-					<button className='btn btn-danger' style={{ marginTop: '10px' }} onClick={() => {}}>
-						Reset form
-					</button>
+
 					<input
 						style={{
 							marginTop: '40px',
 							width: '15vw',
-							backgroundColor: '#da20c1',
-							borderRadius: '20px',
-							color: 'white',
+							backgroundColor: '#daa700',
+							borderRadius: '10px',
+							border: '2px white solid',
+							color: 'black',
 						}}
 						type='submit'
 						value={'Accept'}
@@ -118,12 +118,19 @@ export const FormSite = () => {
 				<h2 style={{ textAlign: 'center' }}>.........</h2>
 			</form>
 			<div>
-				<button className='btn btn-primary' style={{ margin: '20px' }}>
+				<button className='btn btn-warning' style={{ margin: '20px' }}>
 					Add picture
 				</button>
 			</div>
 			<div>
-				<div style={{ backgroundColor: 'lightgray', textAlign: 'center' }}>
+				<div
+					style={{
+						backgroundColor: '#015958',
+						color: 'white',
+						textAlign: 'center',
+						border: '5px white solid',
+						borderRadius: '20px',
+					}}>
 					<h1 style={{ textAlign: 'center' }}>Added cars</h1>
 					<h2>Company name: {newCar?.companyName.toUpperCase()}</h2>
 					<h2>Car type:{newCar?.carModel.toUpperCase()}</h2>
