@@ -1,6 +1,8 @@
 import { useEffect, useState, useContext, createContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
+import { addDoc, collection, doc, getDocs, setDoc, deleteDoc, deleteField, updateDoc } from 'firebase/firestore'
+import { db } from '../../firebase'
 
 import styled from 'styled-components'
 
@@ -26,6 +28,7 @@ const StyledForm = styled.div`
 export const FormContext = createContext('Hello')
 export const FormSite = () => {
 	const {
+		reset,
 		register,
 		handleSubmit,
 		watch,
@@ -35,16 +38,19 @@ export const FormSite = () => {
 			companyName: '',
 			carModel: '',
 			carColor: '',
+			carDoors: 0,
+			fuelType: 'Pb',
 		},
 	})
+	const carColection = collection(db, 'cars')
 	const [newCar, setNewCar] = useState<CarValue>()
 	const onSubmit = handleSubmit(data => {
-		setNewCar(prevValue => (prevValue = data))
+		addDoc(carColection, data)
+		reset({ carColor: '', carModel: '', carDoors: 0, companyName: '', fuelType: 'On' })
 	})
-	useEffect(() => {
-		console.log(newCar)
-	}, [])
+
 	const formnav = useNavigate()
+
 	return (
 		<>
 			<div>
@@ -65,14 +71,14 @@ export const FormSite = () => {
 							},
 						})}
 						id='companyName'
-						style={{ width: '50vw', borderRadius: '10px' }}
+						style={{ width: '20vw', borderRadius: '10px' }}
 						type='text'
 					/>
 					<p style={{ color: 'red' }}>{errors.companyName?.message}</p>
 					<label htmlFor='carModel'>Car model name:</label>
 					<input
 						{...register('carModel', { required: 'Need to write car model name' })}
-						style={{ width: '50vw', borderRadius: '10px' }}
+						style={{ width: '20vw', borderRadius: '10px' }}
 						type='text'
 					/>
 					<p style={{ color: 'red' }}>{errors.carModel?.message}</p>
@@ -80,7 +86,7 @@ export const FormSite = () => {
 					<label htmlFor='carColor'>Car color:</label>
 					<input
 						{...register('carColor', { required: 'Color required' })}
-						style={{ width: '50vw', borderRadius: '10px' }}
+						style={{ width: '20vw', borderRadius: '10px' }}
 						type='text'
 					/>
 					<p style={{ color: 'red' }}>{errors.carColor?.message}</p>
@@ -88,7 +94,7 @@ export const FormSite = () => {
 					<label htmlFor='carDoors'>Car dors:</label>
 					<input
 						{...register('carDoors', { required: 'Ur car dont have doors??', maxLength: 5 })}
-						style={{ width: '50vw', borderRadius: '10px' }}
+						style={{ width: '10vw', borderRadius: '10px' }}
 						name='carDoors'
 						type='text'
 					/>
@@ -115,29 +121,11 @@ export const FormSite = () => {
 						value={'Accept'}
 					/>
 				</StyledForm>
-				<h2 style={{ textAlign: 'center' }}>.........</h2>
 			</form>
 			<div>
 				<button className='btn btn-warning' style={{ margin: '20px' }}>
 					Add picture
 				</button>
-			</div>
-			<div>
-				<div
-					style={{
-						backgroundColor: '#015958',
-						color: 'white',
-						textAlign: 'center',
-						border: '5px white solid',
-						borderRadius: '20px',
-					}}>
-					<h1 style={{ textAlign: 'center' }}>Added cars</h1>
-					<h2>Company name: {newCar?.companyName.toUpperCase()}</h2>
-					<h2>Car type:{newCar?.carModel.toUpperCase()}</h2>
-					<h2>Car color:{newCar?.carColor}</h2>
-					<h2>Fuel type: {newCar?.fuelType}</h2>
-					<h2>Doors: {newCar?.carDoors}</h2>
-				</div>
 			</div>
 		</>
 	)

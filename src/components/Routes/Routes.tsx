@@ -7,6 +7,7 @@ import { DetailSite } from '../Details/detailsSite'
 import { SingUpComponent } from '../SignUp/SignUp'
 //import context here
 import { FormContext } from '../Form/formContext'
+import { EditCar } from '../EditCar/editCar'
 
 //components
 
@@ -18,7 +19,8 @@ const Routes = () => {
 					<Route path='/login' element={<SingUpComponent />} />
 					<Route path='/' element={<HomePage />} />
 					<Route path='/form' element={<FormSite />} />
-					<Route path='/cardetails/:carname' element={<DetailSite />} />
+					<Route path='/cardetails/:id' element={<DetailSite />} />
+					<Route path='/editcar/:id' element={<EditCar />} />
 					<Route path='*' element={<ErrorComponent />} />
 				</RoutesList>
 			</FormContext.Provider>

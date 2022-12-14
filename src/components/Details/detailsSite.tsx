@@ -1,12 +1,21 @@
 import { BrowserRouter as Router, Link, Routes, Route, useNavigate, useParams } from 'react-router-dom'
+import { db } from '../../firebase'
+import { collection, doc, setDoc } from 'firebase/firestore'
+import { getDatabase, ref, onValue } from 'firebase/database'
 
 export const DetailSite = () => {
-	let { carname } = useParams()
+	const { id } = useParams()
 	const navigate = useNavigate()
+
+	const db = getDatabase()
+	console.log(db)
+	
+	
 	return (
 		<>
 			<div className='container'>
-				<h2>Car details</h2> <h1> Your Chosen Car is: {carname}</h1>
+				<h2>Car details</h2>
+				<h5>car id is: {id}</h5>
 				<div
 					style={{
 						minHeight: '50vh',

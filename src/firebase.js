@@ -1,13 +1,18 @@
-import firebase from 'firebase/app'
+import { initializeApp } from 'firebase/app'
+import { getFirestore } from 'firebase/firestore'
 import 'firebase/auth'
 
-const app = firebase.initializeApp({
-	apiKey: 'AIzaSyCiAgMluZkgDGWCvYA9Q3j0d_LPc52B-6Y',
-	authDomain: 'car-app-3a814.firebaseapp.com',
+const firebaseConfig = {
+	apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+	authDomain: process.env.REACT_APP_FIREBASE_API_AUTH_DOMAIN,
+	databaseURL: process.env.REACT_APP_FIREBASE_API_DATABASE_URL,
 	projectId: 'car-app-3a814',
-	storageBucket: 'car-app-3a814.appspot.com',
-	messagingSenderId: '139373516974',
-	appId: '1:139373516974:web:d0d21022f85d08849c753f',
-})
-export const auth = app.auth()
-export default app
+	storageBucket: process.env.REACT_APP_FIREBASE_API_STORAGE_BUCKET,
+	messagingSenderId: process.env.REACT_APP_FIREBASE_API_MESSAGING_SENDER_ID,
+	appId: process.env.REACT_APP_FIREBASE_API_APP_ID,
+}
+
+const app = initializeApp(firebaseConfig)
+const db = getFirestore(app)
+
+export { app, db }

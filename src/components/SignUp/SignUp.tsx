@@ -1,9 +1,15 @@
 import { EmailAuthCredential } from 'firebase/auth'
 import { Form, Button, Card } from 'react-bootstrap'
+import { useNavigate } from 'react-router-dom'
 
 export const SingUpComponent = () => {
+	let navigate = useNavigate()
 	return (
 		<>
+			{' '}
+			<Button className='btn btn-warning m-2' onClick={() => navigate('/')}>
+				Home
+			</Button>
 			<Card>
 				<Card.Body className='text-center mb-2'>
 					<h1>SIGN UP</h1>{' '}
