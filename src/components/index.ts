@@ -1,0 +1,13 @@
+import { DetailSite } from './details/detailsSite'
+import { EditCar } from './editCar/EditCar'
+import { ErrorComponent } from './error/ErrorSite'
+import { FormSite } from './form/formSites'
+import { Home } from './home/HomeCars'
+import { HomePage } from './header/HomeHeader'
+
+export * from './details/detailsSite'
+export * from './editCar/EditCar'
+export * from './error/ErrorSite'
+export * from './form/formSites'
+export * from './home/HomeCars'
+export * from './header/HomeHeader'

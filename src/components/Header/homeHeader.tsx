@@ -1,10 +1,10 @@
 import { SearchInput } from '../shared/search'
-import { MainHeader } from '../Home/homeCars'
+import { Home } from '../home/HomeCars'
 export const HomePage = () => {
 	return (
-		<>	
-			<SearchInput></SearchInput>
-			<MainHeader></MainHeader>
+		<>
+			<SearchInput />
+			<Home />
 		</>
 	)
 }

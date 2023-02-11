@@ -1,32 +1,71 @@
-import { BrowserRouter as Router, Link, Routes, Route, useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams, useLocation } from 'react-router-dom'
 import { db } from '../../firebase'
-import { collection, doc, setDoc } from 'firebase/firestore'
-import { getDatabase, ref, onValue } from 'firebase/database'
+import { doc, getDoc } from 'firebase/firestore'
+import { useEffect, useState } from 'react'
+import Image from '../../media/cars-brand.jpg'
+import { Car } from '../../infrastructure'
+import Modal from '../shared/Modal'
+
+//styled
+import { DivDetails, ButtonDetails, DivBlock,HeaderStyled } from './Div.styled'
+import { StyledButton } from '../editCar/Edit-styled'
 
 export const DetailSite = () => {
 	const { id } = useParams()
+	console.log(id)
 	const navigate = useNavigate()
+	const [myCar, setMyCar] = useState<Car>()
+	const [showModal, setShowModal] = useState(false)
+	useEffect(() => {
+		const getCar = async () => {
+			try {
+				const car = await getDoc(doc(db, 'cars', id!))
+				if (car.exists()) {
+					setMyCar(car.data() as Car)
+				}
+			} catch (e) {
+				console.log(e)
+			}
+		}
+		getCar()
+	}, [])
 
-	const db = getDatabase()
-	console.log(db)
-	
-	
 	return (
 		<>
-			<div className='container'>
-				<h2>Car details</h2>
-				<h5>car id is: {id}</h5>
-				<div
-					style={{
-						minHeight: '50vh',
-						backgroundColor: '#008F8C',
-						border: '5px white solid',
-						borderRadius: '20px',
-					}}></div>
-				<button style={{ marginTop: '10px' }} className='btn btn-warning' onClick={() => navigate(`/`)}>
-					Home
-				</button>
-			</div>
+			<DivDetails>
+				<img src={Image} alt='cars brands' />
+				<h1>Car details</h1>
+				{showModal ? (
+					<Modal showModal={setShowModal} />
+				) : (
+					<>
+						<h1></h1>
+					</>
+				)}
+				<div>
+					<h3>Company name : {myCar?.companyName}</h3>
+					<h3>Car model name: {myCar?.carModel}</h3>
+					<h3>Car color: {myCar?.carColor}</h3>
+					<h3>Doors : {myCar?.carDoors}</h3>
+					<h3>Fuel type : {myCar?.fuelType}</h3>
+				</div>
+				<StyledButton
+					onClick={() => {
+						setShowModal(!showModal)
+					}}>
+					EDIT
+				</StyledButton>
+				<DivBlock>
+					<ButtonDetails
+						onClick={() =>
+							navigate(`/`, {
+								state: { id },
+							})
+						}>
+						HOME
+					</ButtonDetails>
+				</DivBlock>
+			</DivDetails>
 		</>
 	)
 }

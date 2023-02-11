@@ -3,19 +3,10 @@ import { useNavigate } from 'react-router-dom'
 import { collection, doc, getDocs, deleteDoc, query, where, limit, startAt, orderBy } from 'firebase/firestore'
 import { db } from '../../firebase'
 //style
-import {
-	StyledDiv,
-	StyledDivSearch,
-	StyledDivContent,
-	StyledButton,
-	StyledInput,
-	StyledButtonDetails,
-	StyledButtonEdit,
-} from './Home.styled'
+import { StyledDiv, StyledDivSearch, StyledDivContent, StyledButton } from './Home.styled'
 import { DetailsProvider } from '../details/DetailsContext'
 import { INITIAL_STATE, homerReducer } from './HomeReducer'
 import { Car } from '../../infrastructure'
-import { FaCarAlt } from 'react-icons/fa'
 
 const debounce = (func: () => void, wait: number) => {
 	let timeout: any
@@ -39,7 +30,7 @@ const getCars = async ({ searchValue }: { searchValue?: string }) => {
 					orderBy('companyName', 'asc'),
 					where('companyName', '>=', searchValue),
 					where('companyName', '<', searchValue + 'z'),
-					limit(2)
+					limit(10)
 				)
 		: () => query(collection(db, 'cars'))
 
@@ -75,15 +66,8 @@ export const Home = () => {
 
 	useEffect(() => {
 		const fn = debounce(async () => {
-			setIsFetching(true)
-			try {
-				const carsData = await getCars({ searchValue })
-				setCars(carsData?.docs.map(doc => ({ ...(doc.data() as Car), id: doc.id })))
-				setIsFetching(false)
-			} catch (e) {
-				console.error(e)
-				setIsFetching(false)
-			}
+			const carsData = await getCars({ searchValue })
+			setCars(carsData?.docs.map(doc => ({ ...(doc.data() as Car), id: doc.id })))
 		}, 1000)
 		fn()
 	}, [searchValue])
@@ -92,28 +76,26 @@ export const Home = () => {
 		<>
 			<DetailsProvider>
 				<StyledDiv>
-					<h1>Dashboard</h1>
+					<h3>Dashboard</h3>
 
 					<StyledDivSearch>
 						<label htmlFor='serchCar'>Search car from your list </label> <span></span>
-						<StyledInput name='serchCar' type='text' onChange={handleCarSearch} value={searchValue} />
+						<input name='serchCar' type='text' onChange={handleCarSearch} value={searchValue} />
 					</StyledDivSearch>
 
-					<StyledDiv className='container'>
+					<StyledDivContent className='container'>
 						<h2>MY ALL CARS</h2>
 						{cars?.map(car => (
-							<StyledDivContent key={car.id}>
-								<h3>
-									<FaCarAlt /> <span></span> Car company: {car.companyName}
-								</h3>
+							<div key={car.id}>
+								<h3>Car company: {car.companyName}</h3>
 								<h4>Car name: {car.carModel}</h4>
 								<h5>Car color: {car.carColor}</h5>
-								<StyledButtonDetails onClick={() => navigate(`cardetails/${car.id}`)}>Details</StyledButtonDetails>
-								<StyledButtonEdit onClick={() => navigate(`editcar/${car.id}`)}>Edit Car</StyledButtonEdit>
+								<StyledButton onClick={() => navigate(`cardetails/${car.id}`)}>Details</StyledButton>
+								<StyledButton onClick={() => navigate(`editcar/${car.id}`)}>Edit Car</StyledButton>
 								<StyledButton onClick={() => deleteCar(car.id)}>Delete from my cars list</StyledButton>
-							</StyledDivContent>
+							</div>
 						))}
-					</StyledDiv>
+					</StyledDivContent>
 					<StyledButton>Next page</StyledButton>
 				</StyledDiv>
 			</DetailsProvider>

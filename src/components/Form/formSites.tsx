@@ -1,68 +1,79 @@
-import { useEffect, useState, useContext, createContext } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useForm } from 'react-hook-form'
-import { addDoc, collection, doc, getDocs, setDoc, deleteDoc, deleteField, updateDoc } from 'firebase/firestore'
+import { useEffect, useState } from 'react'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { set, useForm } from 'react-hook-form'
+import { addDoc, collection, doc, getDocs, setDoc, deleteDoc, deleteField, updateDoc, getDoc } from 'firebase/firestore'
 import { db } from '../../firebase'
+import { StyledForms, StyledButton, StyledInput, ModalDiv } from './Form-styled'
 
-import styled from 'styled-components'
+import { Car } from '../../infrastructure'
+import ModalForm from './ModalForm'
 
-interface CarValue {
-	companyName: string
-	carModel: string
-	carColor: string
-	carDoors: number
-	fuelType: string
+const defaultValues = {
+	companyName: '',
+	carModel: '',
+	carColor: '',
+	carDoors: 0,
+	fuelType: 'Pb',
 }
 
-const StyledForm = styled.div`
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	flex-direction: column;
-	color: white;
-	padding: 20px 0;
-	text-transform: uppercase;
-	font-family: monospace;
-	font-size: xx-large;
-`
-export const FormContext = createContext('Hello')
 export const FormSite = () => {
+	const [showModal, setShowModal] = useState(false)
+	const navigate = useNavigate()
+	const location = useLocation()
+	const { id } = useParams()
+
+	const isEdition = location.pathname.includes('/editcar')
 	const {
 		reset,
 		register,
 		handleSubmit,
-		watch,
 		formState: { errors },
-	} = useForm<CarValue>({
-		defaultValues: {
-			companyName: '',
-			carModel: '',
-			carColor: '',
-			carDoors: 0,
-			fuelType: 'Pb',
-		},
-	})
+	} = useForm<Car>({ defaultValues })
+
 	const carColection = collection(db, 'cars')
-	const [newCar, setNewCar] = useState<CarValue>()
+	const carRef = doc(carColection, String(id))
 	const onSubmit = handleSubmit(data => {
-		addDoc(carColection, data)
-		reset({ carColor: '', carModel: '', carDoors: 0, companyName: '', fuelType: 'On' })
+		const apiCall = !isEdition
+			? () => addDoc(carColection, data)
+			: () => {
+					alert('Dane zostały edytowane')
+					setDoc(carRef, data)
+			  }
+		try {
+			apiCall()
+		} catch (e) {
+			reset({ carColor: '', carModel: '', carDoors: 0, companyName: '', fuelType: 'On' })
+		}
 	})
 
-	const formnav = useNavigate()
+	useEffect(() => {
+		if (isEdition) {
+			const getCar = async () => {
+				try {
+					const document = await getDoc(doc(db, 'cars', id!))
+					reset(document.data())
+				} catch (e) {
+					console.log(e)
+				}
+			}
+			getCar()
+		}
+	}, [isEdition])
 
 	return (
 		<>
+			{isEdition && showModal ? <ModalForm setShowModal={setShowModal} /> : null}
 			<div>
-				<button onClick={() => formnav('/')} style={{ margin: '20px' }} className='btn btn-warning'>
-					Home
-				</button>
+				<StyledButton onClick={() => navigate('/')}>Home</StyledButton>
 			</div>
 
-			<form style={{ backgroundColor: '#015958', border: '2px white solid', borderRadius: '20px' }} onSubmit={onSubmit}>
-				<StyledForm>
-					<label htmlFor='companyName'>Company name:</label>
-					<input
+			<form onSubmit={onSubmit}>
+				<StyledForms>
+					<h2>ADD CAR</h2>
+					<label style={{ width: '200px' }} htmlFor='companyName'>
+						Company name:
+					</label>
+					<StyledInput
 						{...register('companyName', {
 							required: 'Write a name of company',
 							minLength: {
@@ -71,62 +82,41 @@ export const FormSite = () => {
 							},
 						})}
 						id='companyName'
-						style={{ width: '20vw', borderRadius: '10px' }}
 						type='text'
 					/>
 					<p style={{ color: 'red' }}>{errors.companyName?.message}</p>
-					<label htmlFor='carModel'>Car model name:</label>
-					<input
-						{...register('carModel', { required: 'Need to write car model name' })}
-						style={{ width: '20vw', borderRadius: '10px' }}
-						type='text'
-					/>
+					<label htmlFor='carModel' style={{ width: '200px' }}>
+						Car model name:
+					</label>
+					<StyledInput {...register('carModel', { required: 'Need to write car model name' })} type='text' />
 					<p style={{ color: 'red' }}>{errors.carModel?.message}</p>
 
-					<label htmlFor='carColor'>Car color:</label>
-					<input
-						{...register('carColor', { required: 'Color required' })}
-						style={{ width: '20vw', borderRadius: '10px' }}
-						type='text'
-					/>
+					<label htmlFor='carColor' style={{ width: '200px' }}>
+						Car color:
+					</label>
+					<StyledInput {...register('carColor', { required: 'Color required' })} type='text' />
 					<p style={{ color: 'red' }}>{errors.carColor?.message}</p>
 
-					<label htmlFor='carDoors'>Car dors:</label>
-					<input
+					<label htmlFor='carDoors' style={{ width: '200px' }}>
+						Car dors:
+					</label>
+					<StyledInput
 						{...register('carDoors', { required: 'Ur car dont have doors??', maxLength: 5 })}
-						style={{ width: '10vw', borderRadius: '10px' }}
 						name='carDoors'
 						type='text'
 					/>
-					<p style={{ color: 'red' }}>{errors.carDoors?.message}</p>
+					<p>{errors.carDoors?.message}</p>
 
 					<label htmlFor='fuelType'>Fuel type:</label>
 					<select {...register('fuelType')} name='fuelType' id='fuel'>
-						<option value=''>Select..:</option>
 						<option value='ON'>On</option>
 						<option value='Pb'>Pb</option>
 						<option value='Pb + LPG'>PB+LPG</option>
 					</select>
-
-					<input
-						style={{
-							marginTop: '40px',
-							width: '15vw',
-							backgroundColor: '#daa700',
-							borderRadius: '10px',
-							border: '2px white solid',
-							color: 'black',
-						}}
-						type='submit'
-						value={'Accept'}
-					/>
-				</StyledForm>
+					<br />
+					<StyledInput type='submit' value={'Accept'} />
+				</StyledForms>
 			</form>
-			<div>
-				<button className='btn btn-warning' style={{ margin: '20px' }}>
-					Add picture
-				</button>
-			</div>
 		</>
 	)
 }

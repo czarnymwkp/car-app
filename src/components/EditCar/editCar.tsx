@@ -1,11 +1,12 @@
-import { useNavigate } from 'react-router-dom'
+import { DivDetails } from '../details/Div.styled'
+import { FormSite } from '../form/formSites'
 
 export const EditCar = () => {
-	const navigate = useNavigate()
 	return (
 		<>
-			<div>EDIT</div>
-			<button onClick={() => navigate(`/`)}>HOME</button>
+			<DivDetails>
+				<FormSite />
+			</DivDetails>
 		</>
 	)
 }
