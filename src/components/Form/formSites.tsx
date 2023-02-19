@@ -34,9 +34,11 @@ export const FormSite = () => {
 	const carRef = doc(carColection, String(id))
 	const onSubmit = handleSubmit(data => {
 		const apiCall = !isEdition
-			? () => addDoc(carColection, data)
+			? () => {
+					addDoc(carColection, data)
+					reset({ carColor: '', carModel: '', carDoors: 0, companyName: '', fuelType: 'On' })
+			  }
 			: () => {
-					alert('Dane zostały edytowane')
 					setDoc(carRef, data)
 			  }
 		try {
@@ -114,7 +116,7 @@ export const FormSite = () => {
 						<option value='Pb + LPG'>PB+LPG</option>
 					</select>
 					<br />
-					<StyledInput type='submit' value={'Accept'} />
+					<StyledInput type='submit' value={'Accept'} onClick={() => setShowModal(true)} />
 				</StyledForms>
 			</form>
 		</>

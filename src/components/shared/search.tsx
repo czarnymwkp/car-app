@@ -7,6 +7,9 @@ export const SearchInput = () => {
 	return (
 		<StyledDiv>
 			<div>
+				<StyledButton onClick={() => navigate('/dupa')}>LOGIN</StyledButton>
+			</div>
+			<div>
 				<StyledButton onClick={() => navigate('/addCar')}>ADD CAR FORM</StyledButton>
 			</div>
 		</StyledDiv>

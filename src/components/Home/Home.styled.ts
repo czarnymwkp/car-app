@@ -33,9 +33,9 @@ export const StyledDivContent = styled.div`
 export const StyledButton = styled.button`
 	background-color: white;
 	color: black;
-	width: 15vw;
+	min-width: 10vw;
 	border-radius: 20px;
-	margin: 10px;
+	margin: 2px;
 	transition: 2s;
 	padding: 5px;
 	font-size: 13px;
@@ -46,13 +46,17 @@ export const StyledButton = styled.button`
 		color: black;
 		background-color: lightcyan;
 	}
+	&:focus {
+		color: white;
+		background-color: black;
+	}
 `
 export const StyledButtonDetails = styled.button`
 	background-color: white;
 	color: darkblue;
 	min-width: 10vw;
 	border-radius: 20px;
-	margin: 10px;
+	margin: 2px;
 	transition: 2s;
 	padding: 5px;
 	font-size: 13px;
@@ -63,6 +67,10 @@ export const StyledButtonDetails = styled.button`
 		color: black;
 		background-color: lightskyblue;
 	}
+	&:focus {
+		color: white;
+		background-color: black;
+	}
 `
 export const StyledButtonEdit = styled.button`
 	background-color: white;
@@ -72,7 +80,7 @@ export const StyledButtonEdit = styled.button`
 	color: darkgreen;
 	min-width: 10vw;
 	border-radius: 20px;
-	margin: 50px;
+	margin: 10px;
 	transition: 2s;
 	padding: 5px;
 	font-size: 13px;
@@ -81,4 +89,16 @@ export const StyledButtonEdit = styled.button`
 		color: white;
 		background-color: lightpink;
 	}
+	&:focus {
+		color: white;
+		background-color: black;
+	}
+	
+`
+export const MainDiv = styled.div`
+	background-color: white;
+	display: flex;
+	flex-direction: column;
+	
+	
 `

@@ -19,7 +19,7 @@
 	padding: 25px;
 }
 
-.modalContainer .title {
+.modalContainer .modalTittle {
 	display: inline-block;
 	text-align: center;
 	margin-top: 10px;
@@ -37,7 +37,7 @@
 	cursor: pointer;
 }
 
-.modalContainer .body {
+.modalContainer .modal {
 	flex: 50%;
 	display: flex;
 	justify-content: center;
@@ -46,7 +46,7 @@
 	text-align: center;
 }
 
-.modalContainer .footer {
+.modalContainer .modalFooter {
 	flex: 20%;
 	display: flex;
 	justify-content: center;

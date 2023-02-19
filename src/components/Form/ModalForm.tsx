@@ -10,7 +10,7 @@ export default function ModalForm(props: ComponentProps) {
 
 	return (
 		<ModalDiv>
-			<h2>Are you sure to change date in your car???</h2> <StyledButton onClick={() => navigate(`/`)}>X</StyledButton>
+			<h2>Your car details was edited and saved!!!</h2> 
 			<StyledButton onClick={() => props.setShowModal(false)}>V</StyledButton>
 		</ModalDiv>
 	)

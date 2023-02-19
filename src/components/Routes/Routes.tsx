@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Link, Routes as RoutesList, Route, useNavigate } from 'react-router-dom'
 
 import { DetailSite, FormSite, HomePage, EditCar, ErrorComponent } from '../index'
+import './Routes.css'
 //context
 import { DetailsProvider } from '../details/DetailsContext'
 

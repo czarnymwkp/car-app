@@ -1,6 +1,6 @@
-import { useState, useEffect, useReducer, ChangeEventHandler, ChangeEvent } from 'react'
+import { useState, useEffect, ChangeEvent, useReducer } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { collection, doc, getDocs, deleteDoc, query, where, limit, startAt, orderBy } from 'firebase/firestore'
+import { collection, doc, getDocs, deleteDoc, query, where, limit, orderBy } from 'firebase/firestore'
 import { db } from '../../firebase'
 //style
 import {
@@ -12,9 +12,9 @@ import {
 	StyledButtonDetails,
 	StyledButtonEdit,
 } from './Home.styled'
+import Loading from '../shared/Loading'
 import { DetailsProvider } from '../details/DetailsContext'
-import { INITIAL_STATE, homerReducer } from './HomeReducer'
-import { Car } from '../../infrastructure'
+import { Car, State, Search, Fetching, Cars, Action } from '../../infrastructure'
 import { FaCarAlt } from 'react-icons/fa'
 
 const debounce = (func: () => void, wait: number) => {
@@ -41,7 +41,7 @@ const getCars = async ({ searchValue }: { searchValue?: string }) => {
 					where('companyName', '<', searchValue + 'z'),
 					limit(2)
 				)
-		: () => query(collection(db, 'cars'))
+		: () => query(collection(db, 'cars'), orderBy('companyName', 'asc'))
 
 	try {
 		const result = await getDocs(apiCall())
@@ -50,17 +50,52 @@ const getCars = async ({ searchValue }: { searchValue?: string }) => {
 		console.log(err)
 	}
 }
+// reducer
+const initialState: State = {
+	carss: [],
+	searchValue: '',
+	isFetching: true,
+}
+
+const homeCarReducer = (state: State, action: Action) => {
+	switch (action.type) {
+		case 'IS_FETCHING':
+			return {
+				...state,
+				isFetching: action.payload,
+			}
+		case 'SEARCH_VALUE':
+			return { ...state, searchValue: action.payload }
+
+		case 'SHOW_CARS':
+			return {
+				...state,
+				carss: action.payload,
+			}
+		default:
+			return state
+	}
+}
 
 export const Home = () => {
-	const [state, dispach] = useReducer(homerReducer, INITIAL_STATE)
 	const [cars, setCars] = useState<Car[]>()
-	const [searchValue, setSearchValue] = useState<string | undefined>()
+	// reducer
+
+	const [{ carss, searchValue, isFetching }, dispatch] = useReducer(homeCarReducer, initialState)
+
+	//dispatch
+	const isFetchingNow = () => {
+		dispatch({ type: 'IS_FETCHING', payload: false })
+	}
+
+	const isSearchValue = (event: ChangeEvent<HTMLInputElement>) => {
+		dispatch({ type: 'SEARCH_VALUE', payload: event.target.value })
+	}
+	const isCars = (seCars: any) => {
+		dispatch({ type: 'SHOW_CARS', payload: seCars })
+	}
 
 	const navigate = useNavigate()
-
-	const handleCarSearch = (event: ChangeEvent<HTMLInputElement>) => {
-		setSearchValue(event.target.value)
-	}
 
 	const deleteCar = async (id: string) => {
 		try {
@@ -68,6 +103,8 @@ export const Home = () => {
 			await deleteDoc(userCar)
 			const carsData = await getCars({ searchValue })
 			setCars(carsData?.docs.map(doc => ({ ...(doc.data() as Car), id: doc.id })))
+			//const seCars = carsData?.docs.map(doc => ({ ...(doc.data() as Car), id: doc.id }))
+			//return seCars
 		} catch (e) {
 			console.log(e)
 		}
@@ -75,32 +112,30 @@ export const Home = () => {
 
 	useEffect(() => {
 		const fn = debounce(async () => {
-			setIsFetching(true)
 			try {
 				const carsData = await getCars({ searchValue })
 				setCars(carsData?.docs.map(doc => ({ ...(doc.data() as Car), id: doc.id })))
-				setIsFetching(false)
+				isFetchingNow()
 			} catch (e) {
 				console.error(e)
-				setIsFetching(false)
 			}
-		}, 1000)
+		}, 2000)
 		fn()
 	}, [searchValue])
 
 	return (
-		<>
+		<div className='divMain'>
 			<DetailsProvider>
 				<StyledDiv>
 					<h1>Dashboard</h1>
 
 					<StyledDivSearch>
 						<label htmlFor='serchCar'>Search car from your list </label> <span></span>
-						<StyledInput name='serchCar' type='text' onChange={handleCarSearch} value={searchValue} />
+						<StyledInput name='serchCar' type='text' onChange={isSearchValue} value={searchValue} />
 					</StyledDivSearch>
 
 					<StyledDiv className='container'>
-						<h2>MY ALL CARS</h2>
+						{isFetching ? <Loading></Loading> : <h2>MY ALL CARS</h2>}
 						{cars?.map(car => (
 							<StyledDivContent key={car.id}>
 								<h3>
@@ -110,13 +145,13 @@ export const Home = () => {
 								<h5>Car color: {car.carColor}</h5>
 								<StyledButtonDetails onClick={() => navigate(`cardetails/${car.id}`)}>Details</StyledButtonDetails>
 								<StyledButtonEdit onClick={() => navigate(`editcar/${car.id}`)}>Edit Car</StyledButtonEdit>
-								<StyledButton onClick={() => deleteCar(car.id)}>Delete from my cars list</StyledButton>
+								<StyledButton onClick={() => deleteCar(car.id)}>Delete</StyledButton>
 							</StyledDivContent>
 						))}
 					</StyledDiv>
 					<StyledButton>Next page</StyledButton>
 				</StyledDiv>
 			</DetailsProvider>
-		</>
+		</div>
 	)
 }

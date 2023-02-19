@@ -7,7 +7,7 @@ import { Car } from '../../infrastructure'
 import Modal from '../shared/Modal'
 
 //styled
-import { DivDetails, ButtonDetails, DivBlock,HeaderStyled } from './Div.styled'
+import { DivDetails, ButtonDetails, DivBlock } from './Div.styled'
 import { StyledButton } from '../editCar/Edit-styled'
 
 export const DetailSite = () => {

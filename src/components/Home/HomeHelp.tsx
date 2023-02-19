@@ -1,12 +1,28 @@
-import { useState, useEffect, useReducer, ChangeEventHandler, ChangeEvent } from 'react'
+import { useState, useEffect, ChangeEvent, useReducer } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { collection, doc, getDocs, deleteDoc, query, where, limit, startAt, orderBy } from 'firebase/firestore'
 import { db } from '../../firebase'
 //style
-import { StyledDiv, StyledDivSearch, StyledDivContent, StyledButton } from './Home.styled'
+import {
+	MainDiv,
+	StyledDiv,
+	StyledDivSearch,
+	StyledDivContent,
+	StyledButton,
+	StyledInput,
+	StyledButtonDetails,
+	StyledButtonEdit,
+} from './Home.styled'
+import Loading from '../shared/Loading'
 import { DetailsProvider } from '../details/DetailsContext'
-import { INITIAL_STATE, homerReducer } from './HomeReducer'
 import { Car } from '../../infrastructure'
+import { FaCarAlt } from 'react-icons/fa'
+
+interface State {
+	cars: Car[]
+	searchValue: string
+	isFetching: boolean
+}
 
 const debounce = (func: () => void, wait: number) => {
 	let timeout: any
@@ -30,7 +46,7 @@ const getCars = async ({ searchValue }: { searchValue?: string }) => {
 					orderBy('companyName', 'asc'),
 					where('companyName', '>=', searchValue),
 					where('companyName', '<', searchValue + 'z'),
-					limit(10)
+					limit(2)
 				)
 		: () => query(collection(db, 'cars'))
 
@@ -41,11 +57,31 @@ const getCars = async ({ searchValue }: { searchValue?: string }) => {
 		console.log(err)
 	}
 }
+// reducer
+const initialState: State = {
+	cars: [],
+	searchValue: '',
+	isFetching: true,
+}
+
+const homeCarReducer = (state: State, action: any) => {
+	switch (action.type) {
+		case 'SEARCH_VALUE':
+			return {
+				...state,
+			}
+
+		default:
+			return state
+	}
+}
 
 export const Home = () => {
-	const [state, dispach] = useReducer(homerReducer, INITIAL_STATE)
 	const [cars, setCars] = useState<Car[]>()
 	const [searchValue, setSearchValue] = useState<string | undefined>()
+	const [isFetching, setIsFetching] = useState(true)
+
+	// reducer
 
 	const navigate = useNavigate()
 
@@ -66,39 +102,47 @@ export const Home = () => {
 
 	useEffect(() => {
 		const fn = debounce(async () => {
-			const carsData = await getCars({ searchValue })
-			setCars(carsData?.docs.map(doc => ({ ...(doc.data() as Car), id: doc.id })))
-		}, 1000)
+			try {
+				const carsData = await getCars({ searchValue })
+				setCars(carsData?.docs.map(doc => ({ ...(doc.data() as Car), id: doc.id })))
+				setIsFetching(false)
+			} catch (e) {
+				console.error(e)
+				setIsFetching(false)
+			}
+		}, 2000)
 		fn()
 	}, [searchValue])
 
 	return (
-		<>
+		<div className='divMain'>
 			<DetailsProvider>
 				<StyledDiv>
-					<h3>Dashboard</h3>
+					<h1>Dashboard</h1>
 
 					<StyledDivSearch>
 						<label htmlFor='serchCar'>Search car from your list </label> <span></span>
-						<input name='serchCar' type='text' onChange={handleCarSearch} value={searchValue} />
+						<StyledInput name='serchCar' type='text' onChange={handleCarSearch} value={searchValue} />
 					</StyledDivSearch>
 
-					<StyledDivContent className='container'>
-						<h2>MY ALL CARS</h2>
+					<StyledDiv className='container'>
+						{isFetching ? <Loading></Loading> : <h2>MY ALL CARS</h2>}
 						{cars?.map(car => (
-							<div key={car.id}>
-								<h3>Car company: {car.companyName}</h3>
+							<StyledDivContent key={car.id}>
+								<h3>
+									<FaCarAlt /> <span></span> Car company: {car.companyName}
+								</h3>
 								<h4>Car name: {car.carModel}</h4>
 								<h5>Car color: {car.carColor}</h5>
-								<StyledButton onClick={() => navigate(`cardetails/${car.id}`)}>Details</StyledButton>
-								<StyledButton onClick={() => navigate(`editcar/${car.id}`)}>Edit Car</StyledButton>
-								<StyledButton onClick={() => deleteCar(car.id)}>Delete from my cars list</StyledButton>
-							</div>
+								<StyledButtonDetails onClick={() => navigate(`cardetails/${car.id}`)}>Details</StyledButtonDetails>
+								<StyledButtonEdit onClick={() => navigate(`editcar/${car.id}`)}>Edit Car</StyledButtonEdit>
+								<StyledButton onClick={() => deleteCar(car.id)}>Delete</StyledButton>
+							</StyledDivContent>
 						))}
-					</StyledDivContent>
+					</StyledDiv>
 					<StyledButton>Next page</StyledButton>
 				</StyledDiv>
 			</DetailsProvider>
-		</>
+		</div>
 	)
 }
