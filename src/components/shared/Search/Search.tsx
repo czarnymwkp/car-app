@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 
-import { StyledButton, StyledDiv } from './shared.styled'
+import { StyledButton, StyledDiv } from '../shared.styled'
 
 export const SearchInput = () => {
 	let navigate = useNavigate()

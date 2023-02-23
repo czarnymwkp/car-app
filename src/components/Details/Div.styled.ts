@@ -27,7 +27,3 @@ export const ButtonDetails = styled.button`
 export const DivBlock = styled.div`
 	padding: 20px;
 `
-export const HeaderStyled = styled.h1 `
-background-color: aqua;
-color: aquamarine;
-`
