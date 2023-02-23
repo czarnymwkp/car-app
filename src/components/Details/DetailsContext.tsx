@@ -1,5 +1,5 @@
-import { collection, doc, getDocs } from 'firebase/firestore'
-import { useState, useEffect, createContext, useReducer } from 'react'
+import { collection,  getDocs } from 'firebase/firestore'
+import { useState, useEffect, createContext } from 'react'
 import { db } from '../../firebase'
 
 interface DetailsInterface {
@@ -7,19 +7,17 @@ interface DetailsInterface {
 	myCars: {}
 }
 const DetailsContext = createContext<DetailsInterface>({ myCar: [], myCars: [] })
-const myCarReff = collection(db, 'cars')
-const initialState = {}
+const myCarRef = collection(db, 'cars')
 
 //function carReducer(state, action) {}
 
 export const DetailsProvider = ({ children }: { children: JSX.Element }) => {
 	const [myCar, setMyCar] = useState([{}])
-	//const [state, dispatch] = useReducer(carReducer, initialState)
-	const myCars = myCar
+
 	useEffect(() => {
 		const getCar = async () => {
 			try {
-				const data = await getDocs(myCarReff)
+				const data = await getDocs(myCarRef)
 				setMyCar(data.docs.map(doc => ({ ...doc.data(), id: doc.id })))
 			} catch (e) {
 				console.log(e)
@@ -28,7 +26,7 @@ export const DetailsProvider = ({ children }: { children: JSX.Element }) => {
 		getCar()
 	}, [])
 
-	return <DetailsContext.Provider value={{ myCar, myCars }}>{children}</DetailsContext.Provider>
+	return <DetailsContext.Provider value={{ myCar, myCars: myCar }}>{children}</DetailsContext.Provider>
 }
 
 export default DetailsContext

@@ -10,14 +10,6 @@ export const StyledInput = styled.input`
 		border: white;
 	}
 `
-export const StyledDiv = styled.div`
-	background-color: #fff;
-	min-height: 50vh;
-	margin-top: 50px;
-	font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-	padding: 20px;
-	
-`
 export const StyledForms = styled.div`
 	display: flex;
 	flex-direction: column;
@@ -28,14 +20,6 @@ export const StyledForms = styled.div`
 	margin-top: 50px;
 	font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 	padding: 20px;
-`
-export const StyledDivSearch = styled.div`
-	margin-top: 20px;
-`
-export const StyledDivContent = styled.div`
-	margin-top: 20px;
-	color: black;
-	border: 2px white solid;
 `
 export const StyledButton = styled.button`
 	background-color: black;

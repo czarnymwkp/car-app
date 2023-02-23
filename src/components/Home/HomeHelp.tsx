@@ -1,10 +1,9 @@
 import { useState, useEffect, ChangeEvent, useReducer } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { collection, doc, getDocs, deleteDoc, query, where, limit, startAt, orderBy } from 'firebase/firestore'
+import { collection, doc, getDocs, deleteDoc, query, where, limit, orderBy } from 'firebase/firestore'
 import { db } from '../../firebase'
 //style
 import {
-	MainDiv,
 	StyledDiv,
 	StyledDivSearch,
 	StyledDivContent,
@@ -13,16 +12,10 @@ import {
 	StyledButtonDetails,
 	StyledButtonEdit,
 } from './Home.styled'
-import Loading from '../shared/Loading'
-import { DetailsProvider } from '../details/DetailsContext'
+import Loading from '../shared/Loading/Loading'
+import { DetailsProvider } from '../Details/DetailsContext'
 import { Car } from '../../infrastructure'
 import { FaCarAlt } from 'react-icons/fa'
-
-interface State {
-	cars: Car[]
-	searchValue: string
-	isFetching: boolean
-}
 
 const debounce = (func: () => void, wait: number) => {
 	let timeout: any
@@ -55,24 +48,6 @@ const getCars = async ({ searchValue }: { searchValue?: string }) => {
 		return result
 	} catch (err) {
 		console.log(err)
-	}
-}
-// reducer
-const initialState: State = {
-	cars: [],
-	searchValue: '',
-	isFetching: true,
-}
-
-const homeCarReducer = (state: State, action: any) => {
-	switch (action.type) {
-		case 'SEARCH_VALUE':
-			return {
-				...state,
-			}
-
-		default:
-			return state
 	}
 }
 
@@ -127,7 +102,7 @@ export const Home = () => {
 
 					<StyledDiv className='container'>
 						{isFetching ? <Loading></Loading> : <h2>MY ALL CARS</h2>}
-						{cars?.map(car => (
+						{!isFetching && cars?.map(car => (
 							<StyledDivContent key={car.id}>
 								<h3>
 									<FaCarAlt /> <span></span> Car company: {car.companyName}
