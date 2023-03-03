@@ -1,5 +1,5 @@
-import { collection, doc, getDocs } from 'firebase/firestore'
-import { useState, useEffect, createContext, useReducer } from 'react'
+import { collection, getDocs } from 'firebase/firestore'
+import { useState, useEffect, createContext } from 'react'
 import { db } from '../../firebase'
 
 interface DetailsInterface {
@@ -8,14 +8,9 @@ interface DetailsInterface {
 }
 const DetailsContext = createContext<DetailsInterface>({ myCar: [], myCars: [] })
 const myCarReff = collection(db, 'cars')
-const initialState = {}
-
-//function carReducer(state, action) {}
 
 export const DetailsProvider = ({ children }: { children: JSX.Element }) => {
 	const [myCar, setMyCar] = useState([{}])
-	//const [state, dispatch] = useReducer(carReducer, initialState)
-	const myCars = myCar
 	useEffect(() => {
 		const getCar = async () => {
 			try {
@@ -28,7 +23,7 @@ export const DetailsProvider = ({ children }: { children: JSX.Element }) => {
 		getCar()
 	}, [])
 
-	return <DetailsContext.Provider value={{ myCar, myCars }}>{children}</DetailsContext.Provider>
+	return <DetailsContext.Provider value={{ myCar, myCars: myCar }}>{children}</DetailsContext.Provider>
 }
 
 export default DetailsContext

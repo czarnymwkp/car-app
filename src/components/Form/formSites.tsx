@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
-import { set, useForm } from 'react-hook-form'
-import { addDoc, collection, doc, getDocs, setDoc, deleteDoc, deleteField, updateDoc, getDoc } from 'firebase/firestore'
+import {  useForm } from 'react-hook-form'
+import { addDoc, collection, doc,setDoc, getDoc } from 'firebase/firestore'
 import { db } from '../../firebase'
-import { StyledForms, StyledButton, StyledInput, ModalDiv } from './Form-styled'
+import { StyledForms, StyledButton, StyledInput } from '../Form/Form-styled'
 
 import { Car } from '../../infrastructure'
 import ModalForm from './ModalForm'

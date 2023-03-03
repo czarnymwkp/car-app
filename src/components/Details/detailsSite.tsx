@@ -1,21 +1,20 @@
-import { useNavigate, useParams, useLocation } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { db } from '../../firebase'
 import { doc, getDoc } from 'firebase/firestore'
 import { useEffect, useState } from 'react'
-import Image from '../../media/cars-brand.jpg'
+import Image from '../../assets/images/cars-brand.jpg'
 import { Car } from '../../infrastructure'
-import Modal from '../shared/Modal'
+import Modal from '../shared/Modal/Modal'
 
-//styled
 import { DivDetails, ButtonDetails, DivBlock } from './Div.styled'
-import { StyledButton } from '../editCar/Edit-styled'
+import { StyledButton } from '../EditCar/Edit-styled'
 
 export const DetailSite = () => {
 	const { id } = useParams()
-	console.log(id)
 	const navigate = useNavigate()
 	const [myCar, setMyCar] = useState<Car>()
 	const [showModal, setShowModal] = useState(false)
+
 	useEffect(() => {
 		const getCar = async () => {
 			try {

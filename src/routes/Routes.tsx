@@ -1,9 +1,9 @@
-import { BrowserRouter as Router, Link, Routes as RoutesList, Route, useNavigate } from 'react-router-dom'
+import { Routes as RoutesList, Route } from 'react-router-dom'
 
-import { DetailSite, FormSite, HomePage, EditCar, ErrorComponent } from '../index'
+import { DetailSite, FormSite, HomePage, EditCar, ErrorComponent } from '../components/index'
 import './Routes.css'
 //context
-import { DetailsProvider } from '../details/DetailsContext'
+import { DetailsProvider } from '../components/Details/DetailsContext'
 
 const Routes = () => {
 	return (

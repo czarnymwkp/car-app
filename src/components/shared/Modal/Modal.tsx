@@ -1,12 +1,13 @@
 import './Modal.css'
 import { useNavigate, useParams } from 'react-router-dom'
-import { StyledButton } from './shared.styled'
+import { StyledButton } from '../shared.styled'
 
 export default function Modal(props: string | any) {
-	console.log(props)
 	const { id } = useParams()
 	const navigate = useNavigate()
 	const navigateTo = () => navigate(`/editcar/${id}`)
+	const navigateToMain = () => navigate(`/`)
+
 	return (
 		<div className='modalShow modalBackground'>
 			<div className='modalContainer'>
@@ -21,7 +22,7 @@ export default function Modal(props: string | any) {
 				</div>
 				<div className='modalFooter'>
 					<StyledButton onClick={navigateTo}>Continue</StyledButton>
-					<StyledButton onClick={() => console.log(!props.showModal)}>Cancel</StyledButton>
+					<StyledButton onClick={navigateToMain}>Cancel</StyledButton>
 				</div>
 			</div>
 		</div>

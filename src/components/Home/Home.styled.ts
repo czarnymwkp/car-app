@@ -93,12 +93,9 @@ export const StyledButtonEdit = styled.button`
 		color: white;
 		background-color: black;
 	}
-	
 `
 export const MainDiv = styled.div`
 	background-color: white;
 	display: flex;
 	flex-direction: column;
-	
-	
 `

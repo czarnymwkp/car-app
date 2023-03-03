@@ -1,5 +1,5 @@
-import { SearchInput } from '../shared/search'
-import { Home } from '../home/HomeCars'
+import { SearchInput } from '../shared/Search/Search'
+import { Home } from '../Home/HomeCars'
 import './Header.css'
 export const HomePage = () => {
 	return (
