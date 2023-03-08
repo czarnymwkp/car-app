@@ -24,3 +24,9 @@ Editing a car
 We search for a car by typing in letters - the application uses Firebase.
 
 ### Used technologies:
+
+- React
+
+- Styled Components
+
+- React Hook Form
