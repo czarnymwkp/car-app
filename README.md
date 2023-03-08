@@ -30,3 +30,5 @@ We search for a car by typing in letters - the application uses Firebase.
 - Styled Components
 
 - React Hook Form
+
+- Firebase
