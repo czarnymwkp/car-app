@@ -14,3 +14,12 @@ Adding a selected car:
 -number of doors
 
 -fuel type
+
+Removing a car from the list
+
+Editing a car
+
+(We receive information about editing it.)
+
+We search for a car by typing in letters - the application uses Firebase.
+
