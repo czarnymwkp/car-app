@@ -6,7 +6,11 @@
 Adding a selected car:
 
 -specifying the car brand
+
 -specifying its model
+
 -providing the paint color
+
 -number of doors
+
 -fuel type
