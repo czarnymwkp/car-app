@@ -1,5 +1,7 @@
 # CAR-APP - an example application for creating and editing a list of your dream cars.
 
+## The application is integrated with the backend
+
 # Application features:
 
 
